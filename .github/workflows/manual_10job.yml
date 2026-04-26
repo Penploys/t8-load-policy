@@ -28,12 +28,6 @@ jobs:
             y: 70000
           - x: 70001
             y: 80000
-          - x: 80001
-            y: 90000
-          - x: 90001
-            y: 100000
-          - x: 100001
-            y: 110000
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
