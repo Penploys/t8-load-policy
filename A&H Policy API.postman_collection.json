@@ -1,0 +1,2971 @@
+{
+	"info": {
+		"_postman_id": "c469ab28-353b-4e69-a2b6-27efdda91459",
+		"name": "A&H Policy API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49408454",
+		"_collection_link": "https://kittikan-kongoat-1050377.postman.co/workspace/Kittikan's-Team's-Workspace~00753bc2-eade-4491-8560-4d8f00d94a7a/collection/49408454-c469ab28-353b-4e69-a2b6-27efdda91459?action=share&source=collection_link&creator=49408454"
+	},
+	"item": [
+		{
+			"name": "Policy condition memos",
+			"item": [
+				{
+					"name": "Policy condition memos dev",
+					"item": [
+						{
+							"name": "Get Auth Claim staff",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"claim_staff_access_token\", response.data.access_token);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_id",
+											"value": "surveyor",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_secret",
+											"value": "70xUQRbAkGhFFa8S0LtZ8NsJsWpKy0Ux",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "ah-dev+claim-manager@horixon-t8.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "Passw0rd",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "surveyor",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://ah-claim-api-dev.horixon-t8.tech/auth/token",
+									"protocol": "https",
+									"host": [
+										"ah-claim-api-dev",
+										"horixon-t8",
+										"tech"
+									],
+									"path": [
+										"auth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get policyUuid/effectiveAt/expiredAt",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// ถ้า Backend แก้เรื่องเวลาแล้วให้กลับมาใช้ Script นี้",
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"policyUuid\", response.data.policyDetails.policyUuid);",
+											"pm.collectionVariables.set(\"effectiveFrom\", response.data.policyDetails.effectiveAt);",
+											"pm.collectionVariables.set(\"effectiveTo\", response.data.policyDetails.expiredAt);",
+											"",
+											"// const response = pm.response.json();",
+											"",
+											"// const options = {",
+											"//     timeZone: 'Asia/Bangkok', // UTC+7 timezone",
+											"//     year: 'numeric',",
+											"//     month: '2-digit',",
+											"//     day: '2-digit',",
+											"//     hour: '2-digit',",
+											"//     minute: '2-digit',",
+											"//     second: '2-digit',",
+											"//     hour12: false",
+											"// };",
+											"",
+											"// const localEffectiveFromDate = new Date(response.data.policyDetails.effectiveAt).toLocaleDateString(options);",
+											"// const localEffectiveToDate = new Date(response.data.policyDetails.expiredAt).toLocaleDateString(options);",
+											"",
+											"// let [month,day,year] = localEffectiveFromDate.split('/');",
+											"// const newEffectiveDate = `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;",
+											"// [month,day,year] = localEffectiveToDate.split('/');",
+											"// const newEffectiveToDate = `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;",
+											"",
+											"// pm.collectionVariables.set(\"policyUuid\", response.data.policyDetails.policyUuid);",
+											"// pm.collectionVariables.set(\"effectiveFrom\",newEffectiveDate);",
+											"// pm.collectionVariables.set(\"effectiveTo\", newEffectiveToDate);"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://ah-claim-api-dev.horixon-t8.tech/policy/detail?policy_number={{policyNo_csv}}&identity_number={{citizenId_csv}}",
+									"protocol": "https",
+									"host": [
+										"ah-claim-api-dev",
+										"horixon-t8",
+										"tech"
+									],
+									"path": [
+										"policy",
+										"detail"
+									],
+									"query": [
+										{
+											"key": "policy_number",
+											"value": "{{policyNo_csv}}"
+										},
+										{
+											"key": "identity_number",
+											"value": "{{citizenId_csv}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "QA-Create/Update Policy condition memo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"category\": \"{{category_csv}}\",\n    \"remark\": \"{{remark_csv}}\",\n    \"severity\": \"{{severity_csv}}\",\n    \"effectiveFrom\": \"{{effectiveFrom}}\",\n    \"effectiveTo\": \"{{effectiveTo}}\",\n    \"visibility\": [\"SURVEYOR\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://ah-claim-api-dev.horixon-t8.tech/policy/policy-memo/{{policyUuid}}/condition-memos",
+									"protocol": "https",
+									"host": [
+										"ah-claim-api-dev",
+										"horixon-t8",
+										"tech"
+									],
+									"path": [
+										"policy",
+										"policy-memo",
+										"{{policyUuid}}",
+										"condition-memos"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Policy condition memos uat",
+					"item": [
+						{
+							"name": "Get Auth Claim staff",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"claim_staff_access_token\", response.data.access_token);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_id",
+											"value": "surveyor",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_secret",
+											"value": "70xUQRbAkGhFFa8S0LtZ8NsJsWpKy0Ux",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "ah-test+claim-admin@horixon-t8.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "Passw0rd",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "surveyor",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseAuthUrl}}/token",
+									"host": [
+										"{{baseAuthUrl}}"
+									],
+									"path": [
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get policyUuid/effectiveAt/expiredAt",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// ถ้า Backend แก้เรื่องเวลาแล้วให้กลับมาใช้ Script นี้",
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"policyUuid\", response.data.policyDetails.policyUuid);",
+											"pm.collectionVariables.set(\"effectiveFrom\", response.data.policyDetails.effectiveAt);",
+											"pm.collectionVariables.set(\"effectiveTo\", response.data.policyDetails.expiredAt);",
+											"",
+											"// const response = pm.response.json();",
+											"",
+											"// const options = {",
+											"//     timeZone: 'Asia/Bangkok', // UTC+7 timezone",
+											"//     year: 'numeric',",
+											"//     month: '2-digit',",
+											"//     day: '2-digit',",
+											"//     hour: '2-digit',",
+											"//     minute: '2-digit',",
+											"//     second: '2-digit',",
+											"//     hour12: false",
+											"// };",
+											"",
+											"// const localEffectiveFromDate = new Date(response.data.policyDetails.effectiveAt).toLocaleDateString(options);",
+											"// const localEffectiveToDate = new Date(response.data.policyDetails.expiredAt).toLocaleDateString(options);",
+											"",
+											"// let [month,day,year] = localEffectiveFromDate.split('/');",
+											"// const newEffectiveDate = `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;",
+											"// [month,day,year] = localEffectiveToDate.split('/');",
+											"// const newEffectiveToDate = `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;",
+											"",
+											"// pm.collectionVariables.set(\"policyUuid\", response.data.policyDetails.policyUuid);",
+											"// pm.collectionVariables.set(\"effectiveFrom\",newEffectiveDate);",
+											"// pm.collectionVariables.set(\"effectiveTo\", newEffectiveToDate);"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{basePolicyUrl}}/detail?policy_number={{policyNo_csv}}&identity_number={{citizenId_csv}}",
+									"host": [
+										"{{basePolicyUrl}}"
+									],
+									"path": [
+										"detail"
+									],
+									"query": [
+										{
+											"key": "policy_number",
+											"value": "{{policyNo_csv}}"
+										},
+										{
+											"key": "identity_number",
+											"value": "{{citizenId_csv}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "QA-Create/Update Policy condition memo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"category\": \"{{category_csv}}\",\n    \"remark\": \"{{remark_csv}}\",\n    \"severity\": \"{{severity_csv}}\",\n    \"effectiveFrom\": \"{{effectiveFrom}}\",\n    \"effectiveTo\": \"{{effectiveTo}}\",\n    \"visibility\": [\"SURVEYOR\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{basePolicyUrl}}/policy-memo/{{policyUuid}}/condition-memos",
+									"host": [
+										"{{basePolicyUrl}}"
+									],
+									"path": [
+										"policy-memo",
+										"{{policyUuid}}",
+										"condition-memos"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Policy condition memos prod",
+					"item": [
+						{
+							"name": "Get Auth Claim staff",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"claim_staff_access_token\", response.data.access_token);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_id",
+											"value": "surveyor",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_secret",
+											"value": "70xUQRbAkGhFFa8S0LtZ8NsJsWpKy0Ux",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "ah-test+claim-manager@horixon-t8.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "Passw0rd",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "surveyor",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.thaimedclaim.com/auth/token",
+									"protocol": "https",
+									"host": [
+										"api",
+										"thaimedclaim",
+										"com"
+									],
+									"path": [
+										"auth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get policyUuid/effectiveAt/expiredAt",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// ถ้า Backend แก้เรื่องเวลาแล้วให้กลับมาใช้ Script นี้",
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"policyUuid\", response.data.policyDetails.policyUuid);",
+											"pm.collectionVariables.set(\"effectiveFrom\", response.data.policyDetails.effectiveAt);",
+											"pm.collectionVariables.set(\"effectiveTo\", response.data.policyDetails.expiredAt);",
+											"",
+											"// Time zone UTC +7",
+											"// const response = pm.response.json();",
+											"",
+											"// const options = {",
+											"//     timeZone: 'Asia/Bangkok', // UTC+7 timezone",
+											"//     year: 'numeric',",
+											"//     month: '2-digit',",
+											"//     day: '2-digit',",
+											"//     hour: '2-digit',",
+											"//     minute: '2-digit',",
+											"//     second: '2-digit',",
+											"//     hour12: false",
+											"// };",
+											"",
+											"// const localEffectiveFromDate = new Date(response.data.policyDetails.effectiveAt).toLocaleDateString(options);",
+											"// const localEffectiveToDate = new Date(response.data.policyDetails.expiredAt).toLocaleDateString(options);",
+											"",
+											"// let [month,day,year] = localEffectiveFromDate.split('/');",
+											"// const newEffectiveDate = `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;",
+											"// [month,day,year] = localEffectiveToDate.split('/');",
+											"// const newEffectiveToDate = `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;",
+											"",
+											"// pm.collectionVariables.set(\"policyUuid\", response.data.policyDetails.policyUuid);",
+											"// pm.collectionVariables.set(\"effectiveFrom\",newEffectiveDate);",
+											"// pm.collectionVariables.set(\"effectiveTo\", newEffectiveToDate);"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.thaimedclaim.com/policy/detail?policy_number={{policyNo_csv}}&identity_number={{citizenId_csv}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"thaimedclaim",
+										"com"
+									],
+									"path": [
+										"policy",
+										"detail"
+									],
+									"query": [
+										{
+											"key": "policy_number",
+											"value": "{{policyNo_csv}}"
+										},
+										{
+											"key": "identity_number",
+											"value": "{{citizenId_csv}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "QA-Create/Update Policy condition memo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// 1. เช็คว่ายิง API สำเร็จ (Status 200 หรือ 201)",
+											"pm.test(\"Status code is 200 OK\", function () {",
+											"    pm.response.to.be.success; ",
+											"});",
+											"",
+											"// 2. (Option) แสดงชื่อ Policy และ Citizen ID ใน Report",
+											"var policy = pm.iterationData.get(\"policyNo_csv\");",
+											"var citizen = pm.iterationData.get(\"citizenId_csv\");",
+											"",
+											"pm.test(`Data Check: Policy ${policy} | Citizen ${citizen}`, function () {",
+											"    pm.expect(policy).to.not.be.empty;",
+											"    pm.expect(citizen).to.not.be.empty;",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"category\": \"{{category_csv}}\",\n    \"remark\": \"{{remark_csv}}\",\n    \"severity\": \"{{severity_csv}}\",\n    \"effectiveFrom\": \"{{effectiveFrom}}\",\n    \"effectiveTo\": \"{{effectiveTo}}\",\n    \"visibility\": [\"SURVEYOR\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.thaimedclaim.com/policy/policy-memo/{{policyUuid}}/condition-memos",
+									"protocol": "https",
+									"host": [
+										"api",
+										"thaimedclaim",
+										"com"
+									],
+									"path": [
+										"policy",
+										"policy-memo",
+										"{{policyUuid}}",
+										"condition-memos"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Policy condition memos prod (with policy)",
+					"item": [
+						{
+							"name": "Get Auth Claim staff",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"claim_staff_access_token\", response.data.access_token);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_id",
+											"value": "surveyor",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_secret",
+											"value": "70xUQRbAkGhFFa8S0LtZ8NsJsWpKy0Ux",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "ah-test+claim-manager@horixon-t8.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "Passw0rd",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "surveyor",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.thaimedclaim.com/auth/token",
+									"protocol": "https",
+									"host": [
+										"api",
+										"thaimedclaim",
+										"com"
+									],
+									"path": [
+										"auth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get policyUuid/effectiveAt/expiredAt",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.thaimedclaim.com/policy/policy-memo/by-policy-number/{{policyNo_csv}}/condition-memos?page=1&perPage=2",
+									"protocol": "https",
+									"host": [
+										"api",
+										"thaimedclaim",
+										"com"
+									],
+									"path": [
+										"policy",
+										"policy-memo",
+										"by-policy-number",
+										"{{policyNo_csv}}",
+										"condition-memos"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "perPage",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "QA-Create/Update Policy condition memo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// 1. เช็คว่ายิง API สำเร็จ (Status 200 หรือ 201)",
+											"pm.test(\"Status code is 200 OK\", function () {",
+											"    pm.response.to.be.success; ",
+											"});",
+											"",
+											"// 2. (Option) แสดงชื่อ Policy ใน Report",
+											"var policy = pm.iterationData.get(\"policyNo_csv\");",
+											"",
+											"pm.test(`Data Check: Policy ${policy}`, function () {",
+											"    pm.expect(policy).to.not.be.empty;",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"category\": \"{{category_csv}}\",\n    \"remark\": \"{{remark_csv}}\",\n    \"severity\": \"{{severity_csv}}\",\n    \"effectiveFrom\": \"{{effectiveFrom_csv}}\",\n    \"effectiveTo\": \"{{effectiveTo_csv}}\",\n    \"visibility\": [\"SURVEYOR\", \"HOSPITAL\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.thaimedclaim.com/policy/policy-memo/by-policy-number/{{policyNo_csv}}/condition-memos",
+									"protocol": "https",
+									"host": [
+										"api",
+										"thaimedclaim",
+										"com"
+									],
+									"path": [
+										"policy",
+										"policy-memo",
+										"by-policy-number",
+										"{{policyNo_csv}}",
+										"condition-memos"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Example",
+					"item": [
+						{
+							"name": "Policy condition memos",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Staff_Surveyor}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{basePolicyUrl}}/policy-memo/:policyUuid/condition-memos?page=1&perPage=2",
+									"host": [
+										"{{basePolicyUrl}}"
+									],
+									"path": [
+										"policy-memo",
+										":policyUuid",
+										"condition-memos"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "perPage",
+											"value": "2"
+										}
+									],
+									"variable": [
+										{
+											"key": "policyUuid",
+											"value": "0026fff5-33a6-4467-9560-5e255db034ae"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create/Update Policy condition memo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Staff_Surveyor}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    // \"memoUuid\": \"7fa43b5c-b919-4145-b34e-68f5f00845a9\",\n    \"category\": \"BEHAVIOR\",\n    \"remark\": \"test remark condition 2233\",\n    \"severity\": \"LEVEL_2\",\n    \"effectiveFrom\": \"2026-01-01T00:00:00.000Z\",\n    \"effectiveTo\": \"2026-01-31T00:00:00.000Z\",\n    \"visibility\": [\"SURVEYOR\", \"HOSPITAL\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{basePolicyUrl}}/policy-memo/:policyUuid/condition-memos",
+									"host": [
+										"{{basePolicyUrl}}"
+									],
+									"path": [
+										"policy-memo",
+										":policyUuid",
+										"condition-memos"
+									],
+									"variable": [
+										{
+											"key": "policyUuid",
+											"value": "0026fff5-33a6-4467-9560-5e255db034ae"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Policy condition memo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Staff_Surveyor}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{basePolicyUrl}}/policy-memo/0026fff5-33a6-4467-9560-5e255db034ae/condition-memos/7fa43b5c-b919-4145-b34e-68f5f00845a9",
+									"host": [
+										"{{basePolicyUrl}}"
+									],
+									"path": [
+										"policy-memo",
+										"0026fff5-33a6-4467-9560-5e255db034ae",
+										"condition-memos",
+										"7fa43b5c-b919-4145-b34e-68f5f00845a9"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Policy attachments",
+			"item": [
+				{
+					"name": "Policy attachments dev",
+					"item": [
+						{
+							"name": "Get Auth Claim staff",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"claim_staff_access_token\", response.data.access_token);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_id",
+											"value": "surveyor",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_secret",
+											"value": "70xUQRbAkGhFFa8S0LtZ8NsJsWpKy0Ux",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "ah-dev+claim-manager@horixon-t8.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "Passw0rd",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "surveyor",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://ah-claim-api-dev.horixon-t8.tech/auth/token",
+									"protocol": "https",
+									"host": [
+										"ah-claim-api-dev",
+										"horixon-t8",
+										"tech"
+									],
+									"path": [
+										"auth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get policyUuid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"policyUuid\", response.data.policyDetails.policyUuid);"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const filename = pm.iterationData.get(\"local_pdf_filename\"); ",
+											"",
+											"if (filename) {",
+											"    const parts = filename.split('_');",
+											"",
+											"    const policyNo = parts[0]; ",
+											"",
+											"    const citizenId = parts[1].split('.')[0];",
+											"",
+											"    pm.collectionVariables.set(\"policyNo_pdf\", policyNo);",
+											"    pm.collectionVariables.set(\"citizenId_pdf\", citizenId);",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://ah-claim-api-dev.horixon-t8.tech/policy/detail?policy_number={{policyNo_pdf}}&identity_number={{citizenId_pdf}}",
+									"protocol": "https",
+									"host": [
+										"ah-claim-api-dev",
+										"horixon-t8",
+										"tech"
+									],
+									"path": [
+										"policy",
+										"detail"
+									],
+									"query": [
+										{
+											"key": "policy_number",
+											"value": "{{policyNo_pdf}}"
+										},
+										{
+											"key": "identity_number",
+											"value": "{{citizenId_pdf}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get sign-urls for upload file",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// 1. รับค่าจาก CSV",
+											"let fileSize = pm.iterationData.get(\"file_size_bytes\");",
+											"",
+											"// 2. บังคับแปลงเป็นตัวเลข (Integer) เพื่อป้องกัน Error 400",
+											"fileSize = parseInt(fileSize, 10);",
+											"",
+											"// 3. Set ค่ากลับเข้าไป",
+											"pm.collectionVariables.set(\"file_size_to_upload\", fileSize);",
+											"",
+											"// Debug: ปริ้นท์ออกมาดูว่าถูกต้องไหม",
+											"console.log(\"Uploading file:\", pm.iterationData.get(\"local_pdf_filename\"));",
+											"console.log(\"File Size (Int):\", fileSize);"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// เช็คก่อนว่า API ตอบ 200 OK ไหม",
+											"if (pm.response.code === 200) {",
+											"    const res = pm.response.json();",
+											"    ",
+											"    // เช็คว่ามี data array ส่งกลับมาจริงไหม",
+											"    if (res.data && res.data.length > 0) {",
+											"        pm.collectionVariables.set(\"signedUrl\", res.data[0].signedUrl); ",
+											"        pm.collectionVariables.set(\"attachmentUuid\", res.data[0].uuid);",
+											"        console.log(\"Signed URL set successfully.\");",
+											"    } else {",
+											"        console.error(\"API OK but No Data returned!\");",
+											"    }",
+											"} else {",
+											"    // ถ้า Error ให้ปริ้นท์ response ออกมาดูใน Terminal",
+											"    console.error(\"API Failed with status: \" + pm.response.status);",
+											"    console.error(\"Error Response: \" + pm.response.text());",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"folder\": \"policies/file-attachments\",\n    \"files\": [\n        {\n            \"type\": \"pdf\",\n            \"original_file_name\": \"{{local_pdf_filename}}\",\n            \"file_size\": {{file_size_to_upload}}\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://ah-claim-api-dev.horixon-t8.tech/policy/sign-urls",
+									"protocol": "https",
+									"host": [
+										"ah-claim-api-dev",
+										"horixon-t8",
+										"tech"
+									],
+									"path": [
+										"policy",
+										"sign-urls"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Upload file",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const filename = pm.iterationData.get(\"local_pdf_filename\");",
+											"const filePath = `Policy wording/${filename}`;",
+											"pm.request.body.file.src = filePath;"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/pdf",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "file",
+									"file": {
+										"src": ""
+									}
+								},
+								"url": {
+									"raw": "{{signedUrl}}",
+									"host": [
+										"{{signedUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Submit file",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Submit successful\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"attachmentUuids\": [\"{{attachmentUuid}}\"] \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://ah-claim-api-dev.horixon-t8.tech/policy/policy-memo/{{policyUuid}}/attachments/submit",
+									"protocol": "https",
+									"host": [
+										"ah-claim-api-dev",
+										"horixon-t8",
+										"tech"
+									],
+									"path": [
+										"policy",
+										"policy-memo",
+										"{{policyUuid}}",
+										"attachments",
+										"submit"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Policy coverage test",
+			"item": [
+				{
+					"name": "PA coverage preprod",
+					"item": [
+						{
+							"name": "Get Auth Claim staff",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"claim_staff_access_token\", response.data.access_token);"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_id",
+											"value": "surveyor",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_secret",
+											"value": "70xUQRbAkGhFFa8S0LtZ8NsJsWpKy0Ux",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "ah-test+claim-manager@horixon-t8.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "Passw0rd",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "surveyor",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://ah-claim-api-preprod.horixon-t8.tech/auth/token",
+									"protocol": "https",
+									"host": [
+										"ah-claim-api-preprod",
+										"horixon-t8",
+										"tech"
+									],
+									"path": [
+										"auth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get coverage data",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// (1) Start checking Log Policy and Citizen ID",
+											"const policyNumber = pm.iterationData.get(\"policy_number\");",
+											"const citizenId = pm.iterationData.get(\"citizen_id\");",
+											"const expectedKey = pm.iterationData.get(\"key\");",
+											"",
+											"console.log(`--- STARTING TEST ---",
+											"Policy: ${policyNumber}",
+											"Citizen: ${citizenId}",
+											"Key: ${expectedKey}`);",
+											"",
+											"// (2) Array to store failures",
+											"let failures = [];",
+											"",
+											"/**",
+											" * Helper function to compare values",
+											" * - Convert null, undefined to empty string (\"\")",
+											" * - Convert numbers to string",
+											" */",
+											"function compareAndTest(testName, actualValue, expectedValue) {",
+											"    const actualStr = (actualValue === null || actualValue === undefined) ? \"\" : String(actualValue);",
+											"    const expectedStr = (expectedValue === null || expectedValue === undefined) ? \"\" : String(expectedValue);",
+											"",
+											"    pm.test(testName, () => {",
+											"        try {",
+											"            pm.expect(actualStr).to.eql(expectedStr);",
+											"        } catch (e) {",
+											"            // When mismatch occurs, store the failure message",
+											"            failures.push(`[${testName}] Expected: '${expectedStr}', Got: '${actualStr}'`);",
+											"        }",
+											"    });",
+											"}",
+											"",
+											"try {",
+											"    // (3) Get expected data from CSV file",
+											"    const expectedBenefitCode = pm.iterationData.get(\"benefit_coverage_code\");",
+											"    const expectedSubTypeTh = pm.iterationData.get(\"sub_type_th\");",
+											"    const expectedLimit = pm.iterationData.get(\"sub_limit_max\");",
+											"    const expectedUnit = pm.iterationData.get(\"sub_limit_unit\");",
+											"",
+											"    // (4) Get actual data from API Response",
+											"    const response = pm.response.json();",
+											"    let actualBenefit = null;",
+											"    let actualPaCoverage = null;",
+											"    let found = false;",
+											"",
+											"    // (5) Check Main Response",
+											"    pm.test(\"Response status is 200 OK\", () => {",
+											"        pm.response.to.have.status(200);",
+											"    });",
+											"",
+											"    if (response.data && response.data.PA && Array.isArray(response.data.PA)) {",
+											"        // Loop to find benefit that matches 'key' (uniqueId)",
+											"        // Find benefit with uniqueId matching 'key' in CSV",
+											"        for (const pa of response.data.PA) {",
+											"            if (pa.benefits && pa.benefits.ACC_EXP && Array.isArray(pa.benefits.ACC_EXP)) {",
+											"                actualBenefit = pa.benefits.ACC_EXP.find(b => b.uniqueId === expectedKey);",
+											"                if (actualBenefit) {",
+											"                    actualPaCoverage = pa;",
+											"                    found = true;",
+											"                    break;",
+											"                }",
+											"            }",
+											"        }",
+											"    }",
+											"",
+											"    // (6) Start comparison",
+											"    if (found) {",
+											"        pm.test(`Benefit with key '${expectedKey}' was found`, () => {",
+											"            pm.expect(found).to.be.true;",
+											"        });",
+											"",
+											"        compareAndTest(",
+											"            \"Benefit Coverage Code\",",
+											"            actualPaCoverage.benefitCoverageCode,",
+											"            expectedBenefitCode",
+											"        );",
+											"        ",
+											"        compareAndTest(",
+											"            \"Sub Type (TH)\",",
+											"            actualBenefit.subTypeTh,",
+											"            expectedSubTypeTh",
+											"        );",
+											"",
+											"        compareAndTest(",
+											"            \"Limit (sub_limit_max)\",",
+											"            actualBenefit.limit,",
+											"            expectedLimit",
+											"        );",
+											"",
+											"        compareAndTest(",
+											"            \"Unit\",",
+											"            actualBenefit.unit,",
+											"            expectedUnit",
+											"        );",
+											"",
+											"    } else {",
+											"        const errorMsg = `Benefit with key '${expectedKey}' NOT FOUND in response`;",
+											"        pm.test(errorMsg, () => {",
+											"            pm.expect.fail(errorMsg);",
+											"        });",
+											"        failures.push(errorMsg);",
+											"    }",
+											"",
+											"    // (7) Summarize results for this row (will show in Newman Console Log)",
+											"    if (failures.length > 0) {",
+											"        console.error(`--- FAILED ---",
+											"Policy: ${policyNumber}, Citizen: ${citizenId}",
+											"Mismatches:",
+											"${failures.join('\\n')}`);",
+											"    } else {",
+											"        console.log(`--- PASSED ---",
+											"Policy: ${policyNumber}, Citizen: ${citizenId}`);",
+											"    }",
+											"",
+											"    // (8) Create final Test Case to summarize if this Iteration passed or not",
+											"    pm.test(\"All coverage data must match CSV\", () => {",
+											"        if (failures.length > 0) {",
+											"            // Create Error message collecting all failures",
+											"            const errorMessage = `Policy ${policyNumber} (Citizen: ${citizenId}) failed: \\n${failures.join('\\n')}`;",
+											"            ",
+											"            // Explicitly FAIL this test and show the message",
+											"            throw new Error(errorMessage);",
+											"        }",
+											"        // If failures.length === 0, this test will pass automatically",
+											"    });",
+											"",
+											"} catch (e) {",
+											"    console.error(`Test script failed for Policy ${policyNumber}: ${e}`);",
+											"    pm.test(\"Test script execution failed\", () => {",
+											"        pm.expect.fail(`Script error: ${e.message}`);",
+											"    });",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://ah-claim-api-preprod.horixon-t8.tech/policy/coverages?policy_number={{policy_number}}&identity_number={{citizen_id}}",
+									"protocol": "https",
+									"host": [
+										"ah-claim-api-preprod",
+										"horixon-t8",
+										"tech"
+									],
+									"path": [
+										"policy",
+										"coverages"
+									],
+									"query": [
+										{
+											"key": "policy_number",
+											"value": "{{policy_number}}"
+										},
+										{
+											"key": "identity_number",
+											"value": "{{citizen_id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "coverage prod",
+					"item": [
+						{
+							"name": "Get Auth Claim staff",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"claim_staff_access_token\", response.data.access_token);"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_id",
+											"value": "surveyor",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_secret",
+											"value": "70xUQRbAkGhFFa8S0LtZ8NsJsWpKy0Ux",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "ah-test+claim-manager@horixon-t8.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "Passw0rd",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "surveyor",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.thaimedclaim.com/auth/token",
+									"protocol": "https",
+									"host": [
+										"api",
+										"thaimedclaim",
+										"com"
+									],
+									"path": [
+										"auth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get plan code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"planCode\", response.data.policyDetails.planCode);",
+											"pm.collectionVariables.set(\"iiaOutsource\", response.data.policyDetails.iiaOutsource);",
+											"pm.collectionVariables.set(\"memberUuid\", response.data.member.uuid);",
+											"pm.collectionVariables.set(\"firstNameTh\", response.data.member.firstNameTh);",
+											"pm.collectionVariables.set(\"lastNameTh\", response.data.member.lastNameTh);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.thaimedclaim.com/policy/detail?policy_number={{policyNo}}&iia_membership={{iiaMembership}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"thaimedclaim",
+										"com"
+									],
+									"path": [
+										"policy",
+										"detail"
+									],
+									"query": [
+										{
+											"key": "policy_number",
+											"value": "{{policyNo}}"
+										},
+										{
+											"key": "iia_membership",
+											"value": "{{iiaMembership}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get coverage data",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// 1. Get response as JSON",
+											"var jsonData = pm.response.json();",
+											"",
+											"// 2. Get Policy No and Citizen ID",
+											"// Try to get from URL query params first, otherwise fallback to variables",
+											"var policyNo = pm.request.url.query.find(q => q.key == \"policy_number\")?.value || pm.variables.get(\"policyNo\");",
+											"var citizenId = pm.request.url.query.find(q => q.key == \"identity_number\")?.value || pm.variables.get(\"citizenId\");",
+											"",
+											"// 3. Check Coverage Logic",
+											"// Check all Keys in data object (e.g., IPD, OPD, PA, DENTAL, etc.)",
+											"var foundCoverage = false;",
+											"var foundTypes = []; // Array to store found coverage types",
+											"",
+											"if (jsonData.data) {",
+											"    var keys = Object.keys(jsonData.data);",
+											"    for (var i = 0; i < keys.length; i++) {",
+											"        var key = keys[i];",
+											"        var value = jsonData.data[key];",
+											"        ",
+											"        // If Key is an Array and has data inside (>0), mark as found",
+											"        if (Array.isArray(value) && value.length > 0) {",
+											"            foundCoverage = true;",
+											"            foundTypes.push(key); ",
+											"        }",
+											"    }",
+											"}",
+											"",
+											"// 4. Display Test Results (Add CitizenID to Test case name)",
+											"if (foundCoverage) {",
+											"    // Join types with comma e.g., \"IPD, OPD\"",
+											"    var typesString = foundTypes.join(\", \");",
+											"    ",
+											"    pm.test(`[PASSED] Found Coverage Data (${typesString}) for ${policyNo}_${citizenId}`, function () {",
+											"        pm.expect(foundCoverage).to.be.true;",
+											"    });",
+											"} else {",
+											"    pm.test(`[FAILED] Not found data coverage for ${policyNo}_${citizenId}`, function () {",
+											"        pm.expect(foundCoverage).to.be.true;",
+											"    });",
+											"}",
+											"",
+											"// 5. Print Log to Console",
+											"console.log(\"---------------------------------------------------\");",
+											"console.log(`Policy: ${policyNo}`);",
+											"console.log(`Citizen ID: ${citizenId}`);",
+											"console.log(`Result: ${foundCoverage ? \"PASSED\" : \"FAILED\"}`);",
+											"console.log(`Types Found: ${foundTypes.join(\", \") || \"None\"}`);",
+											"console.log(\"---------------------------------------------------\");"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.thaimedclaim.com/policy/coverages?policy_number={{policyNo}}&member_uuid={{memberUuid}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"thaimedclaim",
+										"com"
+									],
+									"path": [
+										"policy",
+										"coverages"
+									],
+									"query": [
+										{
+											"key": "policy_number",
+											"value": "{{policyNo}}"
+										},
+										{
+											"key": "member_uuid",
+											"value": "{{memberUuid}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "coverage prod single",
+					"item": [
+						{
+							"name": "Get Auth Claim staff",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"claim_staff_access_token\", response.data.access_token);"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_id",
+											"value": "surveyor",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_secret",
+											"value": "70xUQRbAkGhFFa8S0LtZ8NsJsWpKy0Ux",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "ah-test+claim-manager@horixon-t8.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "Passw0rd",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "surveyor",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.thaimedclaim.com/auth/token",
+									"protocol": "https",
+									"host": [
+										"api",
+										"thaimedclaim",
+										"com"
+									],
+									"path": [
+										"auth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get plan code",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();",
+											"pm.collectionVariables.set(\"planCode\", response.data.policyDetails.planCode);",
+											"pm.collectionVariables.set(\"iiaOutsource\", response.data.policyDetails.iiaOutsource);",
+											"pm.collectionVariables.set(\"memberUuid\", response.data.member.uuid);",
+											"pm.collectionVariables.set(\"firstNameTh\", response.data.member.firstNameTh);",
+											"pm.collectionVariables.set(\"lastNameTh\", response.data.member.lastNameTh);",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.thaimedclaim.com/policy/detail?policy_number=14048-169-250082645&identity_number=1102005214768&first_name_th=&last_name_th=",
+									"protocol": "https",
+									"host": [
+										"api",
+										"thaimedclaim",
+										"com"
+									],
+									"path": [
+										"policy",
+										"detail"
+									],
+									"query": [
+										{
+											"key": "policy_number",
+											"value": "14048-169-250082645"
+										},
+										{
+											"key": "identity_number",
+											"value": "1102005214768"
+										},
+										{
+											"key": "first_name_th",
+											"value": ""
+										},
+										{
+											"key": "last_name_th",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get coverage data",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// 1. Get response as JSON",
+											"var jsonData = pm.response.json();",
+											"",
+											"// 2. Get Policy No and Citizen ID",
+											"// Try to get from URL query params first, otherwise fallback to variables",
+											"var policyNo = pm.request.url.query.find(q => q.key == \"policy_number\")?.value || pm.variables.get(\"policyNo\");",
+											"var citizenId = pm.request.url.query.find(q => q.key == \"identity_number\")?.value || pm.variables.get(\"citizenId\");",
+											"",
+											"// 3. Check Coverage Logic",
+											"// Check all Keys in data object (e.g., IPD, OPD, PA, DENTAL, etc.)",
+											"var foundCoverage = false;",
+											"var foundTypes = []; // Array to store found coverage types",
+											"",
+											"if (jsonData.data) {",
+											"    var keys = Object.keys(jsonData.data);",
+											"    for (var i = 0; i < keys.length; i++) {",
+											"        var key = keys[i];",
+											"        var value = jsonData.data[key];",
+											"        ",
+											"        // If Key is an Array and has data inside (>0), mark as found",
+											"        if (Array.isArray(value) && value.length > 0) {",
+											"            foundCoverage = true;",
+											"            foundTypes.push(key); ",
+											"        }",
+											"    }",
+											"}",
+											"",
+											"// 4. Display Test Results (Add CitizenID to Test case name)",
+											"if (foundCoverage) {",
+											"    // Join types with comma e.g., \"IPD, OPD\"",
+											"    var typesString = foundTypes.join(\", \");",
+											"    ",
+											"    pm.test(`[PASSED] Found Coverage Data (${typesString}) for ${policyNo}_${citizenId}`, function () {",
+											"        pm.expect(foundCoverage).to.be.true;",
+											"    });",
+											"} else {",
+											"    pm.test(`[FAILED] Not found data coverage for ${policyNo}_${citizenId}`, function () {",
+											"        pm.expect(foundCoverage).to.be.true;",
+											"    });",
+											"}",
+											"",
+											"// 5. Print Log to Console",
+											"console.log(\"---------------------------------------------------\");",
+											"console.log(`Policy: ${policyNo}`);",
+											"console.log(`Citizen ID: ${citizenId}`);",
+											"console.log(`Result: ${foundCoverage ? \"PASSED\" : \"FAILED\"}`);",
+											"console.log(`Types Found: ${foundTypes.join(\", \") || \"None\"}`);",
+											"console.log(\"---------------------------------------------------\");"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{claim_staff_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.thaimedclaim.com/policy/coverages?policy_number=14048-169-250082645&member_uuid={{memberUuid}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"thaimedclaim",
+										"com"
+									],
+									"path": [
+										"policy",
+										"coverages"
+									],
+									"query": [
+										{
+											"key": "policy_number",
+											"value": "14048-169-250082645"
+										},
+										{
+											"key": "member_uuid",
+											"value": "{{memberUuid}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Policy search",
+			"item": [
+				{
+					"name": "Get Auth Claim staff",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"pm.collectionVariables.set(\"claim_staff_access_token\", response.data.access_token);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_id",
+									"value": "surveyor",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_secret",
+									"value": "70xUQRbAkGhFFa8S0LtZ8NsJsWpKy0Ux",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "ah-test+claim-manager@horixon-t8.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Passw0rd",
+									"type": "text"
+								},
+								{
+									"key": "audience",
+									"value": "surveyor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://api.thaimedclaim.com/auth/token",
+							"protocol": "https",
+							"host": [
+								"api",
+								"thaimedclaim",
+								"com"
+							],
+							"path": [
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get search data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"const policyData = response.data.list[0];",
+									"",
+									"if (policyData) {",
+									"    pm.collectionVariables.set(\"firstNameTh\", policyData.firstNameTh);",
+									"    pm.collectionVariables.set(\"lastNameTh\", policyData.lastNameTh);    ",
+									"    pm.collectionVariables.set(\"iiaMembership\", policyData.member.iiaMembership);",
+									"",
+									"    pm.collectionVariables.set(\"effectiveAt\", policyData.effectiveAt);",
+									"    pm.collectionVariables.set(\"expiredAt\", policyData.expiredAt);",
+									"    ",
+									"    console.log(\"Variables set successfully\");",
+									"} else {",
+									"    console.log(\"No policy data found in list\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{claim_staff_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9,th;q=0.8"
+							},
+							{
+								"key": "authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJWZlhYZFpHSXZ4VnRVRERlakM4LTJfalBlOWJxdUZ2d0hDSUZoTlR6cEhRIn0.eyJleHAiOjE3NzAxOTE5MDksImlhdCI6MTc3MDE5MTAwOSwianRpIjoiNTZkMmFjMWMtZTZhYy00OWNhLWJmMjQtNzBhZWI2NDJlZWYyIiwiaXNzIjoiaHR0cHM6Ly9rbm90dHktY3Jvd24uaG9yaXhvbi10OC50ZWNoL3JlYWxtcy9hbmhfcHJvZCIsImF1ZCI6WyJzdXJ2ZXlvciIsImFjY291bnQiXSwic3ViIjoiM2Q2YTEwMzUtMTgyNS00YjgyLTk5MzEtM2RhNjFjZjU5MDI2IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoic3VydmV5b3IiLCJzaWQiOiIyZjFhZWI0Yi1kMGRiLTRhNDMtYmQwOC0xNzA0ODg5ZDNmOGUiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImNsYWltLW1hbmFnZXIiLCJzdXJ2ZXlvciIsInVtYV9hdXRob3JpemF0aW9uIiwiZGVmYXVsdC1yb2xlcy1hbmhfcHJvZCJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImdyb3VwX2xpc3QiOlsiL1N1cnZleW9yL0RQIFN1cnZleW9yIiwiL1N1cnZleW9yIl0sImluc3VyZXJfc3VwcG9ydHMiOlsiREhJUEFZQSJdLCJvcmdhbml6YXRpb24iOiLguJrguKPguLTguKnguLHguJfguJfguLTguJ7guKLguJvguKPguLDguIHguLHguJnguKDguLHguKIiLCJuYW1lIjoiY2xhaW0gbWFuYWdlci4iLCJsYW5ndWFnZSI6InRoIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWgtdGVzdCtjbGFpbS1tYW5hZ2VyQGhvcml4b24tdDguY29tIiwiZ2l2ZW5fbmFtZSI6ImNsYWltIiwiZmFtaWx5X25hbWUiOiJtYW5hZ2VyLiIsImVtYWlsIjoiYWgtdGVzdCtjbGFpbS1tYW5hZ2VyQGhvcml4b24tdDguY29tIiwic3VydmV5b3JfanNvbl9kYXRhIjp7Im5hbWUiOiJESElQQVlBIFN1cnZleW9yIiwic2x1ZyI6IkRISVBBWUEifX0.jJW1Zm9wTnNLLWo44SJDC6FrrVv6m4MtBYDaifM7tyBI80ifaEnx-BQwwkZ2jk7XlTa0rQvHrW3KuTpxWdMB2298J6UyD3ZCKSyWwZsj2Ui4x5eyuJ4US2P2AvssWtwufFOQ9LMJkH1kvrVsAN3NaI-8mlYkSn6g6RbcFPoGC1TXCskayxq9nL4-N8lCeI1RPkcUMI665gU-Pd0gtLlHNEZKY4H6jN5HbKoBGQ_hEn1RfIKf3cvDPCDxMqNLRldB3WTsGIcjcFHiaxeDyIRBovtkdPPLyVNng2DQGzAVQ9SiDQXgXGgp1UzVN19mwbjn_HX-0JX0MChnUi6hh-bPZA"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"3a6-Ir7kDs7dFHHaz/oTe4yw0i3KOiw\""
+							},
+							{
+								"key": "origin",
+								"value": "https://thaimedclaim.com"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://thaimedclaim.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"macOS\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+							}
+						],
+						"url": {
+							"raw": "https://api.thaimedclaim.com/policy/search?policy_number={{policyNo}}&identity_number={{citizenId}}&loss_date={{loss_date}}&insurer_slug=DHIPAYA&page=1&per_page=20&lang=EN",
+							"protocol": "https",
+							"host": [
+								"api",
+								"thaimedclaim",
+								"com"
+							],
+							"path": [
+								"policy",
+								"search"
+							],
+							"query": [
+								{
+									"key": "policy_number",
+									"value": "{{policyNo}}"
+								},
+								{
+									"key": "identity_number",
+									"value": "{{citizenId}}"
+								},
+								{
+									"key": "loss_date",
+									"value": "{{loss_date}}"
+								},
+								{
+									"key": "insurer_slug",
+									"value": "DHIPAYA"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								},
+								{
+									"key": "lang",
+									"value": "EN"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Policy search single",
+			"item": [
+				{
+					"name": "Get Auth Claim staff",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"pm.collectionVariables.set(\"claim_staff_access_token\", response.data.access_token);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_id",
+									"value": "surveyor",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "client_secret",
+									"value": "70xUQRbAkGhFFa8S0LtZ8NsJsWpKy0Ux",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "ah-test+claim-manager@horixon-t8.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Passw0rd",
+									"type": "text"
+								},
+								{
+									"key": "audience",
+									"value": "surveyor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://api.thaimedclaim.com/auth/token",
+							"protocol": "https",
+							"host": [
+								"api",
+								"thaimedclaim",
+								"com"
+							],
+							"path": [
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get search data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"const policyData = response.data.list[0];",
+									"",
+									"if (policyData) {",
+									"    pm.collectionVariables.set(\"firstNameTh\", policyData.firstNameTh);",
+									"    pm.collectionVariables.set(\"lastNameTh\", policyData.lastNameTh);    ",
+									"    pm.collectionVariables.set(\"iiaMembership\", policyData.member.iiaMembership);",
+									"",
+									"    pm.collectionVariables.set(\"effectiveAt\", policyData.effectiveAt);",
+									"    pm.collectionVariables.set(\"expiredAt\", policyData.expiredAt);",
+									"    ",
+									"    console.log(\"Variables set successfully\");",
+									"} else {",
+									"    console.log(\"No policy data found in list\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{claim_staff_access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9,th;q=0.8"
+							},
+							{
+								"key": "authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJWZlhYZFpHSXZ4VnRVRERlakM4LTJfalBlOWJxdUZ2d0hDSUZoTlR6cEhRIn0.eyJleHAiOjE3NzAxOTE5MDksImlhdCI6MTc3MDE5MTAwOSwianRpIjoiNTZkMmFjMWMtZTZhYy00OWNhLWJmMjQtNzBhZWI2NDJlZWYyIiwiaXNzIjoiaHR0cHM6Ly9rbm90dHktY3Jvd24uaG9yaXhvbi10OC50ZWNoL3JlYWxtcy9hbmhfcHJvZCIsImF1ZCI6WyJzdXJ2ZXlvciIsImFjY291bnQiXSwic3ViIjoiM2Q2YTEwMzUtMTgyNS00YjgyLTk5MzEtM2RhNjFjZjU5MDI2IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoic3VydmV5b3IiLCJzaWQiOiIyZjFhZWI0Yi1kMGRiLTRhNDMtYmQwOC0xNzA0ODg5ZDNmOGUiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImNsYWltLW1hbmFnZXIiLCJzdXJ2ZXlvciIsInVtYV9hdXRob3JpemF0aW9uIiwiZGVmYXVsdC1yb2xlcy1hbmhfcHJvZCJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImdyb3VwX2xpc3QiOlsiL1N1cnZleW9yL0RQIFN1cnZleW9yIiwiL1N1cnZleW9yIl0sImluc3VyZXJfc3VwcG9ydHMiOlsiREhJUEFZQSJdLCJvcmdhbml6YXRpb24iOiLguJrguKPguLTguKnguLHguJfguJfguLTguJ7guKLguJvguKPguLDguIHguLHguJnguKDguLHguKIiLCJuYW1lIjoiY2xhaW0gbWFuYWdlci4iLCJsYW5ndWFnZSI6InRoIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWgtdGVzdCtjbGFpbS1tYW5hZ2VyQGhvcml4b24tdDguY29tIiwiZ2l2ZW5fbmFtZSI6ImNsYWltIiwiZmFtaWx5X25hbWUiOiJtYW5hZ2VyLiIsImVtYWlsIjoiYWgtdGVzdCtjbGFpbS1tYW5hZ2VyQGhvcml4b24tdDguY29tIiwic3VydmV5b3JfanNvbl9kYXRhIjp7Im5hbWUiOiJESElQQVlBIFN1cnZleW9yIiwic2x1ZyI6IkRISVBBWUEifX0.jJW1Zm9wTnNLLWo44SJDC6FrrVv6m4MtBYDaifM7tyBI80ifaEnx-BQwwkZ2jk7XlTa0rQvHrW3KuTpxWdMB2298J6UyD3ZCKSyWwZsj2Ui4x5eyuJ4US2P2AvssWtwufFOQ9LMJkH1kvrVsAN3NaI-8mlYkSn6g6RbcFPoGC1TXCskayxq9nL4-N8lCeI1RPkcUMI665gU-Pd0gtLlHNEZKY4H6jN5HbKoBGQ_hEn1RfIKf3cvDPCDxMqNLRldB3WTsGIcjcFHiaxeDyIRBovtkdPPLyVNng2DQGzAVQ9SiDQXgXGgp1UzVN19mwbjn_HX-0JX0MChnUi6hh-bPZA"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"3a6-Ir7kDs7dFHHaz/oTe4yw0i3KOiw\""
+							},
+							{
+								"key": "origin",
+								"value": "https://thaimedclaim.com"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://thaimedclaim.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"macOS\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+							}
+						],
+						"url": {
+							"raw": "https://api.thaimedclaim.com/policy/search?policy_number=14048-169-250071250&identity_number=1730200296690&loss_date=&insurer_slug=DHIPAYA&page=1&per_page=20&lang=EN",
+							"protocol": "https",
+							"host": [
+								"api",
+								"thaimedclaim",
+								"com"
+							],
+							"path": [
+								"policy",
+								"search"
+							],
+							"query": [
+								{
+									"key": "policy_number",
+									"value": "14048-169-250071250"
+								},
+								{
+									"key": "identity_number",
+									"value": "1730200296690"
+								},
+								{
+									"key": "loss_date",
+									"value": ""
+								},
+								{
+									"key": "insurer_slug",
+									"value": "DHIPAYA"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								},
+								{
+									"key": "lang",
+									"value": "EN"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJtM1dCRE5MR0pIbndQYWVXNXk3VjlWb2FuQmRocWZvd01NMGxIM2VDMTNRIn0.eyJleHAiOjE3NjAxNjcwMjgsImlhdCI6MTc2MDA4MDYyOCwianRpIjoiZDg3YmVmM2EtYzI0NS00ZGY3LWJkMGItYzMxMjk4OTUyMWU3IiwiaXNzIjoiaHR0cHM6Ly9haC1jbGFpbS1rYy1kZXYuaG9yaXhvbi10OC50ZWNoL3JlYWxtcy9hbmhfZGV2ZWxvcCIsImF1ZCI6WyJzdXJ2ZXlvciIsImFjY291bnQiXSwic3ViIjoiNGQ4MzhiMGQtZmJkOC00Njk0LTk5YzYtMjJlMjEwZmVhNGU2IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoic3VydmV5b3IiLCJzaWQiOiI3Y2Q0NGFhYy1kYzk0LTRmNjEtYTIzYi0zNTFjMzRmYjRjODYiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJzdXJ2ZXlvci1kaGlwYXlhLXJlYWQiLCJzdXJ2ZXlvciIsImRlZmF1bHQtcm9sZXMtYW5oX2RldmVsb3AiLCJ1bWFfYXV0aG9yaXphdGlvbiIsInN1cnZleW9yLWRoaXBheWEtd3JpdGUiLCJjbGFpbS1hc3Nlc3NvciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwib3JnYW5pemF0aW9uIjoi4Lia4Lij4Li04Lip4Lix4LiXIOC4lOC4teC4nuC4tSDguYDguIvguK3guKPguYzguYDguKfguKLguYwg4LmB4Lit4LiZ4LiU4LmM4Lil4Lit4Lin4LmMIOC4iOC4s-C4geC4seC4lCIsImluc3VyZXJfc3VwcG9ydHMiOlsiREhJUEFZQSJdLCJuYW1lIjoiUG9zc2F0aG9ybiBTdGFmZiIsImxhbmd1YWdlIjoidGgiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzdXJ2ZXlvci1zdGFmZkBkaGlwYXlhLmNvbSIsImdpdmVuX25hbWUiOiJQb3NzYXRob3JuIiwiZmFtaWx5X25hbWUiOiJTdGFmZiIsImVtYWlsIjoic3VydmV5b3Itc3RhZmZAZGhpcGF5YS5jb20iLCJzdXJ2ZXlvcl9qc29uX2RhdGEiOnsibmFtZSI6IkRoaXBoYXlhIFN1cnZleW9yIiwic2x1ZyI6IkRISVBBWUEiLCJkZXNjcmlwdGlvbiI6IlNwZWNpYWxpc3QgaW4gc3RydWN0dXJhbCBkYW1hZ2UgYXNzZXNzbWVudHMgZm9yIGluc3VyYW5jZSBjbGFpbXMuIiwiY29udGFjdF9udW1iZXIiOiIwMi0zNDUtNjc4OSIsInN0cmVldF9hZGRyZXNzIjoiMTIzIFJhdGNoYWRhcGhpc2VrIFJvYWQiLCJjaXR5IjoiQmFuZ2tvayIsInN0YXRlIjoiQmFuZ2tvayIsInppcF9jb2RlIjoiMTA0MDAiLCJucGkiOiIxMjM0NTY3ODkwIiwidGF4b25vbXlfY29kZSI6IjIwN1EwMDAwMFgiLCJyb2xlX2Rlc2NyaXB0aW9uIjoiTGljZW5zZWQgZmllbGQgc3VydmV5b3Igc3BlY2lhbGl6aW5nIGluIHJlc2lkZW50aWFsIGFuZCBjb21tZXJjaWFsIHByb3BlcnR5IGV2YWx1YXRpb25zLiIsImxpY2Vuc2VfbnVtYmVyIjoiVEgtREhJUC0yMDI1LTAwMSIsImxpY2Vuc2Vfc3RhdGUiOiJUSCIsImxpY2Vuc2VfZXhwaXJhdGlvbl9kYXRlIjoiMjAyNi0xMi0zMSIsImVtYWlsIjoicHVsc2VjbGFpbUBob3JpeG9uLXQ4LmNvbSJ9fQ.V_OT_PkX60ozsWZCpQbGjv5DzcESkxzL3dYuzl9eKpUkwig7wA_auGOtaqPWRNOt76Lc5kcawAQ1-5CkjQSYMPn41ldzJR7FT3zT0F8P_DyFnklLORH1FiJenpqNZwrRdCoolUvt3suQQ4yEfqI4aPyrtQcSm46S9qEGxAdNACjRQKoxMG-G_8xCzSznmdtnRWMRui8yfnGB3iJ1VA3Fc8Y-r8N6VClKDdw6go0XtErj1tt9QdOmsaCSkbZmb_zM33FYaLSZICCIQxyRbpkerj7So4P9Ek2LvGp2GPwMm262rUWHKsvH_qUPbA1tEKJAQf7idZtNm4DDODi_R01Gug",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "policy_number",
+			"value": ""
+		},
+		{
+			"key": "identity_number",
+			"value": ""
+		},
+		{
+			"key": "category",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "remark",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "severity",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "claim_staff_access_token",
+			"value": ""
+		},
+		{
+			"key": "policyUuid",
+			"value": ""
+		},
+		{
+			"key": "effectiveFrom",
+			"value": ""
+		},
+		{
+			"key": "effectiveTo",
+			"value": ""
+		},
+		{
+			"key": "planCode",
+			"value": ""
+		},
+		{
+			"key": "memberUuid",
+			"value": ""
+		},
+		{
+			"key": "firstNameTh",
+			"value": ""
+		},
+		{
+			"key": "lastNameTh",
+			"value": ""
+		},
+		{
+			"key": "iiaOutsource",
+			"value": ""
+		}
+	]
+}

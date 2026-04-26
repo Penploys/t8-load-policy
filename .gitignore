@@ -1,0 +1,12 @@
+# --- Dependencies ---
+node_modules/
+
+# --- Output Data (JSON Logs) ---
+output_json/
+
+# --- Reports ---
+report_html/
+report_csv/
+
+# --- System Files ---
+.DS_Store
