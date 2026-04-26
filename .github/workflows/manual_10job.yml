@@ -1,0 +1,60 @@
+name: Run RPA Task
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  rpa-job:
+    runs-on: ubuntu-latest
+    strategy:
+      # รันพร้อมกัน 10 เครื่อง (Job)
+      matrix:
+        include:
+          - x: 10001
+            y: 20000
+          - x: 20001
+            y: 30000
+          # เพิ่มให้ครบ 10 ชุดตามช่วงที่คุณต้องการ
+          - x: 30001
+            y: 40000
+          - x: 40001
+            y: 50000
+          - x: 50001
+            y: 60000
+          - x: 60001
+            y: 70000
+          - x: 70001
+            y: 80000
+          - x: 80001
+            y: 90000
+          - x: 90001
+            y: 100000
+          - x: 100001
+            y: 110000
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Newman and Dependencies
+        run: |
+          npm install -g newman
+          npm install
+
+      - name: Run RPA Script
+        # ดึงค่า X และ Y จาก matrix มาใส่ในคำสั่งรัน
+        run: node run_HA_2025_9.js ${{ matrix.x }} ${{ matrix.y }}
+
+      - name: Upload CSV Result
+        uses: actions/upload-artifact@v4
+        with:
+          # ตั้งชื่อ artifact ให้ไม่ซ้ำกันตามค่า X เพื่อป้องกันไฟล์ทับกัน
+          name: report-csv-${{ matrix.x }}-${{ matrix.y }}
+          path: "*.csv"
+          retention-days: 5
