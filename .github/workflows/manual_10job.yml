@@ -44,7 +44,7 @@ jobs:
 
       - name: Run RPA Script
         # ดึงค่า X และ Y จาก matrix มาใส่ในคำสั่งรัน
-        run: node run_HA_2025_9.js ${{ matrix.x }} ${{ matrix.y }}
+        run: node speed_no_coverage.js ${{ matrix.x }} ${{ matrix.y }}
 
       - name: Upload CSV Result
         uses: actions/upload-artifact@v4
